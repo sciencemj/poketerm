@@ -1,7 +1,7 @@
 # Poketerm
 ![Example Image](./example.png)
 
-Python cli pokemon tool!
+**Python CLI Pokemon tool!**
 Watch random pokemon image in terminal!
 ## Install
 ```bash
@@ -12,6 +12,8 @@ uv tool install . --force
 ## Usage
 ```bash
 uv tool run poketerm <flags>
+or
+poketerm <flags>
 ```
 ### Flags
 - --dex: show pokedex info
