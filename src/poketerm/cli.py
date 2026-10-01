@@ -1,6 +1,7 @@
 import argparse
 import io
 import random
+import re
 import sys
 
 import httpx
@@ -13,18 +14,25 @@ from rich.table import Table
 from rich.text import Text
 
 
+def parse_pokemon_query(input_id):
+    """Split user input into (species, form index).
+
+    Numeric input may carry a form suffix ("003", "003-2"); anything else is
+    a species name, which can itself contain hyphens ("mr-mime", "ho-oh").
+    """
+    query = str(input_id).strip().lower()
+    match = re.fullmatch(r"(\d+)(?:-(\d+))?", query)
+    if match:
+        return int(match.group(1)), int(match.group(2) or 1)
+    return query, 1
+
+
 def get_pokemon_id_and_name(input_id=None):
     if input_id is None:
         species_id = random.randint(1, 1025)
         form_idx = 1
     else:
-        parts = str(input_id).split("-")
-        try:
-            species_id = int(parts[0])
-        except ValueError:
-            species_id = parts[0].lower()
-
-        form_idx = int(parts[1]) if len(parts) > 1 else 1
+        species_id, form_idx = parse_pokemon_query(input_id)
 
     try:
         response = httpx.get(f"https://pokeapi.co/api/v2/pokemon-species/{species_id}/")
@@ -159,7 +167,9 @@ def scrape_dex_info(base_name):
 def main():
     parser = argparse.ArgumentParser(description="Random Pokemon ASCII Art Generator")
     parser.add_argument("--dex", action="store_true", help="Show Pokedex info")
-    parser.add_argument("--id", type=str, help="Specific Pokemon ID (e.g., 003, 003-2)")
+    parser.add_argument(
+        "--id", type=str, help="Pokemon ID or name (e.g., 003, 003-2, mr-mime)"
+    )
     parser.add_argument(
         "--size", type=int, help="Output size in characters (e.g., 10 for 10x10)"
     )

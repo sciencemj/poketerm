@@ -11,11 +11,11 @@ uv tool install . --force
 ```
 ## Usage
 ```bash
-uv tool run poketerm <flags>
-or
 poketerm <flags>
+or (inside the cloned repo, without installing)
+uv run poketerm <flags>
 ```
 ### Flags
 - --dex: show pokedex info
-- --id={num}: show pokemon of given id(different form is seprated by - ex)003, 003-2, 003-3)
+- --id={num|name}: show pokemon of given id or name (different form is separated by - ex)003, 003-2, 003-3, mr-mime)
 - --size={num}: set the width of output(without this flag it will be auto)
