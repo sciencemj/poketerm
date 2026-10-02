@@ -1,3 +1,5 @@
+import sys
+
 from poketerm.cli import main
 
-main()
+sys.exit(main())
